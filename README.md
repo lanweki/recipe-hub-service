@@ -1,1 +1,1 @@
-# recipe-hub-service
+# recipe-hub
