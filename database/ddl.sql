@@ -5,7 +5,8 @@ create table recipe_hub_user
     user_password varchar(50) not null,
     first_name    varchar(50),
     last_name     varchar(50),
-    user_role     varchar(50) not null
+    user_role     varchar(50) not null,
+    unique (username)
 );
 
 create table recipe
@@ -39,4 +40,4 @@ create table user_recipe_book
     user_id   integer not null,
     recipe_id integer not null,
     unique (user_id, recipe_id)
-);1
+);

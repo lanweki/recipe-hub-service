@@ -1,7 +1,5 @@
 package com.recipehub.lanweki.enums;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 
 import java.util.Arrays;
@@ -28,10 +26,9 @@ public enum Cuisine {
         return name;
     }
 
-    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-    public static Cuisine fromString(@JsonProperty("cuisine") String cuisine) throws HttpMessageNotReadableException {
+    public static Cuisine fromString(String value) throws HttpMessageNotReadableException {
         return Arrays.stream(Cuisine.values())
-                .filter(val -> val.getName().equalsIgnoreCase(cuisine) || val.toString().equalsIgnoreCase(cuisine))
+                .filter(val -> val.getName().equalsIgnoreCase(value) || val.toString().equalsIgnoreCase(value))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(""));
     }

@@ -1,49 +1,28 @@
 package com.recipehub.lanweki.service;
 
 import com.recipehub.lanweki.dto.RecipeDto;
-import com.recipehub.lanweki.mapper.RecipeMapper;
-import com.recipehub.lanweki.repository.RecipeRepository;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.recipehub.lanweki.request.CommentAddRequest;
+import com.recipehub.lanweki.request.RecipeAddRequest;
 
-import java.util.NoSuchElementException;
+import java.util.List;;
 
-@Service
-public class RecipeService {
+public interface RecipeService {
 
-    private final RecipeRepository repository;
+    RecipeDto getById(Integer id);
 
-    private final RecipeMapper mapper;
+    List<RecipeDto> getAll(Integer page, Integer size);
 
-    private static final Logger logger = LogManager.getLogger(RecipeService.class);
-    
-    public RecipeService(RecipeRepository repository, RecipeMapper mapper) {
-        this.repository = repository;
-        this.mapper = mapper;
-    }
+    void create(RecipeAddRequest recipeAddRequest);
 
-    public RecipeDto getById(Integer id) {
-        var recipe = repository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Recipe does not exist with id=" + id));
+    List<RecipeDto> searchByName(String name, Integer page, Integer size);
 
-        return mapper.entityToDto(recipe);
-    }
+    List<RecipeDto> searchByCuisine(String cuisine, Integer page, Integer size);
 
-//    public List<RecipeDto> getAll() {
-//        var recipes = repository.findAll();
-//
-//        return recipes.stream()
-//                .map(mapper::entityToDto)
-//                .toList();
-//    }
+    List<RecipeDto> searchByCategory(String category, Integer page, Integer size);
 
-//    public RecipeDto create(RecipeAddRequest recipe) {
-//        var entity = mapper.addRequestToEntity(recipe);
-//        var savedEntity = repository.save(entity);
-//
-//        logger.info("The recipe was created, id={}", savedEntity.getId());
-//        return mapper.entityToDto(savedEntity);
-//    }
+    List<RecipeDto> searchCategoryAndCuisine(String category, String cuisine, Integer page, Integer size);
+
+    List<RecipeDto> searchByPattern(String pattern, Integer page, Integer size);
+
+    void addComment(CommentAddRequest request);
 }

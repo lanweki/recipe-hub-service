@@ -1,8 +1,10 @@
 package com.recipehub.lanweki.entity;
 
+import com.recipehub.lanweki.enums.UserRole;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -14,7 +16,8 @@ import java.util.List;
 public class User {
 
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @Column(name = "username")
     private String username;
@@ -34,8 +37,8 @@ public class User {
     @ManyToMany
     @JoinTable(
             name = "user_recipe_book",
-            joinColumns = { @JoinColumn(name = "user_id") },
-            inverseJoinColumns = { @JoinColumn(name = "recipe_id") }
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "recipe_id")}
     )
     private List<Recipe> recipeBook;
 
@@ -44,4 +47,9 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Comment> comments;
+
+    @PrePersist
+    public void onPrePersist() {
+        if (userRole == null) userRole = UserRole.USER.name();
+    }
 }

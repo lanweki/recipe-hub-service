@@ -4,8 +4,11 @@ import com.recipehub.lanweki.dto.CommentDto;
 import com.recipehub.lanweki.dto.RecipeDto;
 import com.recipehub.lanweki.dto.UserDto;
 import com.recipehub.lanweki.entity.Recipe;
+import com.recipehub.lanweki.entity.User;
+import com.recipehub.lanweki.request.RecipeAddRequest;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -13,8 +16,8 @@ public class RecipeMapper {
     public RecipeDto entityToDto(Recipe entity) {
         return new RecipeDto(entity.getId(),
                 entity.getName(),
-                entity.getCategory(),
-                entity.getCuisine(),
+                getStringFromEnum(entity.getCategory()),
+                getStringFromEnum(entity.getCuisine()),
                 entity.getIngredientsDescription(),
                 entity.getDescription(),
                 entity.getInstruction(),
@@ -22,10 +25,30 @@ public class RecipeMapper {
                 getUserDto(entity),
                 entity.getPictureUrl(),
                 getComments(entity)
-                );
+        );
+    }
+
+    public Recipe addRequestToEntity(RecipeAddRequest recipeAddRequest) {
+        Recipe recipe = new Recipe();
+
+        recipe.setName(recipeAddRequest.getName());
+        recipe.setCategory(recipeAddRequest.getCategory());
+        recipe.setCuisine(recipeAddRequest.getCuisine());
+        recipe.setIngredientsDescription(recipeAddRequest.getIngredients());
+        recipe.setDescription(recipeAddRequest.getIngredients());
+        recipe.setInstruction(recipeAddRequest.getInstruction());
+
+        User user = new User();
+        user.setId(recipeAddRequest.getUserId());
+
+        recipe.setCreatedBy(user);
+        recipe.setPictureUrl(recipe.getPictureUrl());
+
+        return recipe;
     }
 
     private List<CommentDto> getComments(Recipe entity) {
+        if (entity.getComments() == null) return Collections.emptyList();
         return entity.getComments().stream()
                 .map(comment -> new CommentDto(comment.getText(), comment.getUser().getUsername()))
                 .toList();
@@ -39,7 +62,7 @@ public class RecipeMapper {
                 entity.getCreatedBy().getLastName());
     }
 
-//    Recipe dtoToEntity(RecipeDto dto) {
-//
-//    }
+    private String getStringFromEnum(String enumString) {
+        return enumString.replace("_", " ");
+    }
 }

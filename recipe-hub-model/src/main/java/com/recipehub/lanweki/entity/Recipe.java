@@ -10,13 +10,13 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-//@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Entity
 @Table(name = "recipe")
 public class Recipe {
 
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @Column(name = "recipe_name")
     private String name;
@@ -51,4 +51,9 @@ public class Recipe {
 
     @OneToMany(mappedBy = "recipe")
     private List<Comment> comments;
+
+    @PrePersist
+    public void onPrePersist() {
+        createDate = LocalDateTime.now();
+    }
 }
