@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <modules>
-        <module>recipe-hub-web</module>
-        <module>recipe-hub-service</module>
-        <module>recipe-hub-model</module>
+        <module>web</module>
+        <module>service</module>
+        <module>model</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
